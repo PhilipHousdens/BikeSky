@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import RainChanceGraph from './compnents/RainChangeGraph';
 import { WeatherComponent } from './compnents/WeatherComponent';
 import { TempTable } from './compnents/TempTable';
+import { Alert } from './compnents/Alert';
 
 interface WeatherData {
   location: {
@@ -118,13 +119,16 @@ export default function Home() {
   return (
     <div>
       <WeatherComponent weatherData={weatherData} />
+      <div className="my-5 w-[80%] mx-auto">
+        <Alert weatherData={weatherData}/>
+      </div>
       <div className="my-10 w-[80%] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Graph Section */}
-        <div className="w-full h-fit bg-black bg-opacity-50 rounded-lg p-4">
+        <div className="w-full h-fit bg-black rounded-lg p-4">
           <RainChanceGraph rainData={rainData} />
         </div>
         {/* Table Section */}
-        <div className="w-[80%] bg-black bg-opacity-50 rounded-lg p-4 mx-auto">
+        <div className="w-[80%] bg-black rounded-lg p-4 mx-auto">
           <TempTable weatherData={tempData} />
         </div>
       </div>

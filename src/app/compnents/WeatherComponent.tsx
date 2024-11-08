@@ -28,7 +28,7 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
               <p className="text-md ">{weatherData.current.condition.text}</p>
             </div>
             <div>
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-2xl font-semibold text-bikeOrange">
                 {weatherData.location.name}, {weatherData.location.country}
               </h1>
               <p className="text-lg ">Humidity: {weatherData.current.humidity}%</p>

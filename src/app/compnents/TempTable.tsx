@@ -1,6 +1,8 @@
 import React from 'react';
 
+
 export const TempTable = ({ weatherData }: { weatherData: { timestamps: string[]; temp_c: number[] } }) => {
+    
   return (
     <div >
       <h2 className='text-xl mb-2 text-white'>Temperature Throughout the Day</h2>
