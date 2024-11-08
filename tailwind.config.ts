@@ -11,8 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        bikeOrange: "#FF4141"
-
+        bikeOrange: "#FF4141",
+        test: "#3B2F45",
+        gradientStart: "#2C3E50",
+        gradientEnd: "#34495E"
       },
     },
   },
