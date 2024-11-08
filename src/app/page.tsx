@@ -1,6 +1,8 @@
-"use client"; // Add this line at the top
+"use client";
 
 import React, { useEffect, useState } from 'react';
+import RainChanceGraph from './compnents/RainChangeGraph';
+import { WeatherComponent } from './compnents/WeatherComponent';
 
 interface WeatherData {
   location: {
@@ -16,81 +18,22 @@ interface WeatherData {
     };
     humidity: number;
   };
-}
-
-const WeatherComponent = ({ weatherData }: { weatherData: WeatherData }) => {
-  // Define background classes based on condition
-  const getBackgroundClass = (condition: string) => {
-    const conditionLower = condition.toLowerCase().trim();
-  
-    if (conditionLower.includes('rain')) {
-      return 'bg-[url("/images/raining.jpg")] bg-cover bg-center'; // Rainy
-    }
-    if (conditionLower.includes('fog')) {
-      return 'bg-[url("/images/fog.jpg")] bg-cover bg-center'; // Foggy
-    }
-    if (conditionLower.includes('clear') || conditionLower.includes('sunny')) {
-      return 'bg-[url("/images/clear.jpg")] bg-cover bg-center'; // Sunny or Clear sky
-    }
-    if (conditionLower.includes('mist')) {
-      return 'bg-[url("/images/fog.jpg")] bg-cover bg-center'; // Misty
-    }
-    if (conditionLower.includes('thunder')) {
-      return 'bg-[url("/images/cloudy.jpg")] bg-cover bg-center'; // Thunderstorm
-    }
-    if (conditionLower.includes('cloudy')) {
-      return 'bg-[url("/images/cloudy.jpg")] bg-cover bg-center'; // Thunderstorm
-    }
-    if (conditionLower.includes('snow')) {
-      return 'bg-[url("/images/snow.jpg")] bg-cover bg-center'; // Snowy
-    }
-    if (conditionLower.includes('shower')) {
-      return 'bg-[url("/images/raining.jpg")] bg-cover bg-center'; // Shower
-    }
-    if (conditionLower.includes('blizzard')) {
-      return 'bg-[url("/images/snow.jpg")] bg-cover bg-center'; // Blizzard
-    }
-  
-    return 'bg-gray-300'; // Default fallback
+  forecast: {
+    forecastday: Array<{
+      hour: Array<{
+        time: string;
+        chance_of_rain: number;
+      }>;
+    }>;
   };
-  
-
-  const backgroundClass = getBackgroundClass(weatherData.current.condition.text);
-
-  return (
-    <div className={`w-full ${backgroundClass} bg-cover relative py-10`}>
-      <div className="w-full max-w-2xl mx-auto p-6 bg-black rounded-lg shadow-lg bg-opacity-50 text-white z-10">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex justify-center items-center">
-            <img
-              src={weatherData.current.condition.icon}
-              alt="Weather icon"
-              className="w-20 h-20 object-contain"
-            />
-            <p className="text-md ">{weatherData.current.condition.text}</p>
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold">
-              {weatherData.location.name}, {weatherData.location.country}
-            </h1>
-            <p className="text-lg ">Humidity: {weatherData.current.humidity}%</p>
-          </div>
-        </div>
-
-        <div className="flex justify-between text-center px-2">
-          <p className="text-xl font-bold">{weatherData.current.temp_c}°C</p>
-          <p className="text-xl font-bold">{weatherData.location.localtime}</p>
-        </div>
-      </div>
-    </div>
-
-  );  
-};
+}
 
 export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [rainData, setRainData] = useState<{ timestamps: string[]; chances: number[] }>({ timestamps: [], chances: [] });
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch current weather data
   useEffect(() => {
     const fetchWeather = async () => {
       try {
@@ -112,13 +55,53 @@ export default function Home() {
     fetchWeather();
   }, []);
 
+  // Fetch forecast data and extract hourly rain chances
+  useEffect(() => {
+    const fetchForecast = async () => {
+      try {
+        const response = await fetch('/api/weather?type=forecast');
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
+        const data = await response.json();
+        
+        // Extract hourly rain chances from the forecast data
+        const hourlyRainData = data.forecast.forecastday[0].hour.map((hour: any) => ({
+          time: hour.time,
+          chance_of_rain: hour.chance_of_rain,
+        }));
+
+        const timestamps = hourlyRainData.map((data: any) => data.time);
+        const chances = hourlyRainData.map((data: any) => data.chance_of_rain);
+
+        setRainData({ timestamps, chances });
+
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+    };
+
+    fetchForecast();
+  }, []);
+
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (!weatherData) {
+  if (!weatherData || rainData.timestamps.length === 0) {
     return <div>Loading...</div>;
   }
 
-  return <WeatherComponent weatherData={weatherData} />;
+  return (
+    <div>
+      <WeatherComponent weatherData={weatherData} />
+      <div className="my-10 w-[80%] mx-auto">
+        <RainChanceGraph rainData={rainData} />
+      </div>
+    </div>
+  );
 }
