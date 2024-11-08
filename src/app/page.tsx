@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import RainChanceGraph from './compnents/RainChangeGraph';
 import { WeatherComponent } from './compnents/WeatherComponent';
+import { TempTable } from './compnents/TempTable';
 
 interface WeatherData {
   location: {
@@ -22,6 +23,7 @@ interface WeatherData {
     forecastday: Array<{
       hour: Array<{
         time: string;
+        temp_c: number;
         chance_of_rain: number;
       }>;
     }>;
@@ -31,6 +33,7 @@ interface WeatherData {
 export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [rainData, setRainData] = useState<{ timestamps: string[]; chances: number[] }>({ timestamps: [], chances: [] });
+  const [tempData, setTempData] = useState<{timestamps: string[]; temp_c: number[] }>({timestamps: [], temp_c: []})
   const [error, setError] = useState<string | null>(null);
 
   // Fetch current weather data
@@ -70,12 +73,22 @@ export default function Home() {
           time: hour.time,
           chance_of_rain: hour.chance_of_rain,
         }));
-
+  
         const timestamps = hourlyRainData.map((data: any) => data.time);
         const chances = hourlyRainData.map((data: any) => data.chance_of_rain);
-
+  
         setRainData({ timestamps, chances });
-
+  
+        // Extract hourly temps from the forecast data
+        const hourlyTempData = data.forecast.forecastday[0].hour.map((hour: any) => ({
+          time: hour.time,
+          temp_c: hour.temp_c,
+        }));
+  
+        const temp_c = hourlyTempData.map((data: any) => data.temp_c);
+  
+        setTempData({ timestamps, temp_c });
+  
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -84,9 +97,11 @@ export default function Home() {
         }
       }
     };
-
+  
     fetchForecast();
   }, []);
+  
+  
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -96,12 +111,21 @@ export default function Home() {
     return <div>Loading...</div>;
   }
 
+  if (!weatherData || tempData.timestamps.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <WeatherComponent weatherData={weatherData} />
-      <div className="my-10 w-[80%] mx-auto grid-cols-2">
-        <div className='w-[60%] bg-black bg-opacity-50 rounded-lg'>
+      <div className="my-10 w-[80%] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Graph Section */}
+        <div className="w-full h-fit bg-black bg-opacity-50 rounded-lg p-4">
           <RainChanceGraph rainData={rainData} />
+        </div>
+        {/* Table Section */}
+        <div className="w-[80%] bg-black bg-opacity-50 rounded-lg p-4 mx-auto">
+          <TempTable weatherData={tempData} />
         </div>
       </div>
     </div>

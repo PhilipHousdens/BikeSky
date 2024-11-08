@@ -25,7 +25,6 @@ const RainChanceGraph = ({ rainData }: { rainData: { timestamps: string[]; chanc
           data: rainData.chances,
           fill: false,
           borderColor: 'orange',
-          backgroundColor: 'white',
           tension: 0.1,
         },
       ],
@@ -36,10 +35,6 @@ const RainChanceGraph = ({ rainData }: { rainData: { timestamps: string[]; chanc
         responsive: true,
         plugins: {
             tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.7)', // Set the background color of the tooltip
-              titleColor: 'white', // Set the tooltip title color
-              bodyColor: 'white', // Set the tooltip body color
-              footerColor: 'white', // Optional: set the color of the tooltip footer
               callbacks: {
                 label: (tooltipItem: any) => `${tooltipItem.raw}%`, // Display percentage in the tooltip
               },

@@ -1,26 +1,10 @@
 import React from "react";
 
-interface WeatherData {
-    location: {
-      name: string;
-      country: string;
-      localtime: string;
-    };
-    current: {
-      temp_c: number;
-      condition: {
-        text: string;
-        icon: string;
-      };
-      humidity: number;
-    };
-}
-
-export const WeatherComponent = ({ weatherData }: { weatherData: WeatherData }) => {
+export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
     const getBackgroundClass = (condition: string) => {
       const conditionLower = condition.toLowerCase().trim();
   
-      if (conditionLower.includes('rain')) return 'bg-[url("/images/raining.jpg")] bg-cover bg-center';
+      if (conditionLower.includes('rain') || conditionLower.includes('drizzle')) return 'bg-[url("/images/raining.jpg")] bg-cover bg-center';
       if (conditionLower.includes('fog') || conditionLower.includes('mist')) return 'bg-[url("/images/fog.jpg")] bg-cover bg-center';
       if (conditionLower.includes('clear') || conditionLower.includes('sunny')) return 'bg-[url("/images/clear.jpg")] bg-cover bg-center';
       if (conditionLower.includes('thunder') || conditionLower.includes('cloudy')) return 'bg-[url("/images/cloudy.jpg")] bg-cover bg-center';
