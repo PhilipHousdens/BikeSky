@@ -99,8 +99,10 @@ export default function Home() {
   return (
     <div>
       <WeatherComponent weatherData={weatherData} />
-      <div className="my-10 w-[80%] mx-auto">
-        <RainChanceGraph rainData={rainData} />
+      <div className="my-10 w-[80%] mx-auto grid-cols-2">
+        <div className='w-[60%] bg-black bg-opacity-50 rounded-lg'>
+          <RainChanceGraph rainData={rainData} />
+        </div>
       </div>
     </div>
   );

@@ -1,56 +1,83 @@
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, ChartData, ChartOptions } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, Tooltip, Legend, PointElement, LineElement } from 'chart.js';
+import { useEffect, useState } from 'react';
 
-ChartJS.register(
-  CategoryScale, // Register the category scale for the x-axis
-  LinearScale, // Register the linear scale for the y-axis
-  PointElement,
-  LineElement
-);
+// Register necessary components
+ChartJS.register(CategoryScale, LinearScale, TimeScale, Tooltip, Legend, PointElement, LineElement);
 
-interface RainData {
-  timestamps: string[]; // Array of hourly timestamps (e.g., ['10 AM', '11 AM', '12 PM'])
-  chances: number[];    // Array of rain chances (e.g., [20, 35, 50])
-}
+const RainChanceGraph = ({ rainData }: { rainData: { timestamps: string[]; chances: number[] } }) => {
+  const [data, setData] = useState<any>(null);
 
-interface RainChanceGraphProps {
-  rainData: RainData;
-}
+  useEffect(() => {
+    // Format the timestamps to show only the hour and minute
+    const formattedTimestamps = rainData.timestamps.map((timestamp) => {
+      const date = new Date(timestamp); // Convert the timestamp string to a Date object
+      const hours = date.getHours().toString().padStart(2, '0'); // Get hours and format with leading zero
+      const minutes = date.getMinutes().toString().padStart(2, '0'); // Get minutes and format with leading zero
+      return `${hours}:${minutes}`; // Return the formatted "HH:mm" time
+    });
 
-const RainChanceGraph: React.FC<RainChanceGraphProps> = ({ rainData }) => {
-  const data: ChartData<'line'> = {
-    labels: rainData.timestamps,
-    datasets: [
-      {
-        label: 'Chance of Rain (%)',
-        data: rainData.chances,
-        backgroundColor: 'rgba(135, 206, 250, 0.3)',
-        borderColor: 'rgba(30, 144, 255, 1)',
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
+    setData({
+      labels: formattedTimestamps, // Use the formatted timestamps as labels
+      datasets: [
+        {
+          label: 'Rain Chance',
+          data: rainData.chances,
+          fill: false,
+          borderColor: 'orange',
+          backgroundColor: 'white',
+          tension: 0.1,
+        },
+      ],
+    });
+  }, [rainData]);
 
-  const options: ChartOptions<'line'> = {
-    scales: {
-      x: {
-        type: 'category',
-        title: { display: true, text: 'Time' },
-      },
-      y: {
-        title: { display: true, text: 'Rain Probability (%)' },
-        beginAtZero: true,
-        max: 100,
-      },
-    },
-    plugins: {
-      tooltip: { enabled: true },
-      legend: { display: true },
-    },
-  };
+  const options = {
+        responsive: true,
+        plugins: {
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)', // Set the background color of the tooltip
+              titleColor: 'white', // Set the tooltip title color
+              bodyColor: 'white', // Set the tooltip body color
+              footerColor: 'white', // Optional: set the color of the tooltip footer
+              callbacks: {
+                label: (tooltipItem: any) => `${tooltipItem.raw}%`, // Display percentage in the tooltip
+              },
+            },
+          },
+        scales: {
+            x: {
+                title: {
+                display: true,
+                text: 'Time of Day',
+                color: 'white'
+                },
+                ticks: {
+                    color: 'white', // Axis ticks color
+                },
+                grid: {
+                    color: 'white'
+                }
+            },
+            y: {
+                min: 0,
+                max: 100,
+                title: {
+                display: true,
+                text: 'Chance of Rain (%)',
+                color: 'white'
+                },
+                ticks: {
+                    color: 'white', // Axis ticks color
+                },
+                grid: {
+                    color: 'white'
+                }
+            },
+        },
+    };
 
-  return <Line data={data} options={options} />;
+  return data ? <Line data={data} options={options} /> : <div>Loading...</div>;
 };
 
 export default RainChanceGraph;
