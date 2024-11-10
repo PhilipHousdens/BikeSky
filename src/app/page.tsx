@@ -115,23 +115,9 @@ export default function Home() {
   if (!weatherData || tempData.timestamps.length === 0) {
     return <div>Loading...</div>;
   }
-
   return (
     <div>
       <WeatherComponent weatherData={weatherData} />
-      <div className="my-5 w-[80%] mx-auto">
-        <Alert weatherData={weatherData}/>
-      </div>
-      <div className="my-10 w-[80%] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Graph Section */}
-        <div className="w-full h-fit bg-gradient-to-r from-gradientStart to-gradientEnd rounded-lg p-4">
-          <RainChanceGraph rainData={rainData} />
-        </div>
-        {/* Table Section */}
-        <div className="w-[80%] bg-gradient-to-r from-gradientStart to-gradientEnd rounded-lg p-4 mx-auto">
-          <TempTable weatherData={tempData} />
-        </div>
-      </div>
     </div>
   );
 }

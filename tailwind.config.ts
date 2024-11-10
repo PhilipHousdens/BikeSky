@@ -13,8 +13,8 @@ const config: Config = {
         foreground: "var(--foreground)",
         bikeOrange: "#FF4141",
         test: "#3B2F45",
-        gradientStart: "#2C3E50",
-        gradientEnd: "#34495E"
+        gradientStart: "black",
+        gradientEnd: "#2B3B4A"
       },
     },
   },
