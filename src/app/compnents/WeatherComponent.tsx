@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert } from "./Alert";
 
 
 export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
@@ -34,6 +35,11 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
 
         {/* Foreground Content Centered */}
         <div className="relative z-10 h-full pb-20">
+          {/* Alert */}
+          <div className="absolute top-5 left-0">
+            <Alert weatherData={weatherData}/>
+          </div>
+          
           {/* Display only the time */}
           <p className="text-7xl text-white text-center m-5 font-bold">{localTime} <span className="text-5xl">{amPm(parseInt(localTime))}</span></p>
 
