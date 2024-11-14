@@ -1,7 +1,6 @@
 import React from "react";
 import { Alert } from "./Alert";
 
-
 export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
     const getBackgroundClass = (condition: string) => {
       const conditionLower = condition.toLowerCase().trim();
@@ -9,7 +8,7 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
       if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('thunder')) return 'bg-[url("/images/raining.jpg")]';
       if (conditionLower.includes('fog') || conditionLower.includes('mist')) return 'bg-[url("/images/fog.jpg")]';
       if (conditionLower.includes('clear') || conditionLower.includes('sunny')) return 'bg-[url("/images/clear.jpg")]';
-      if (conditionLower.includes('cloudy')) return 'bg-[url("/images/cloudy.png")]';
+      if (conditionLower.includes('cloudy') || conditionLower.includes('overcast')) return 'bg-[url("/images/cloudy.png")]';
       if (conditionLower.includes('snow') || conditionLower.includes('blizzard')) return 'bg-[url("/images/snow.jpg")]';
 
       return 'bg-gray-300';
