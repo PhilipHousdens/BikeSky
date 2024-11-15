@@ -13,7 +13,7 @@ export const Alert = ({ weatherData }: { weatherData: any }) => {
     const warningMessage = getConditionAlert(weatherData.current.condition.text);
 
     const getTempAlert = (temp_c: number) => {
-        if (temp_c <= 10) return 'Make your to stay warm durring your ride.'
+        if (temp_c <= 10) return 'Make sure to stay warm durring your ride.'
     }
     const tempMessage = getTempAlert(weatherData.current.temp_c);
     return (
