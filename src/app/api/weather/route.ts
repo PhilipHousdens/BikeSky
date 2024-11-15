@@ -22,7 +22,7 @@ const fetchWeatherData = async (city: string, endpoint: string) => {
 export async function GET(request: Request) {
   // Get the query parameter (current or forecast)
   const url = new URL(request.url);
-  const city = 'Moscow'; // Example city, could be fetched dynamically
+  const city = 'Chiang Mai'; // Example city, could be fetched dynamically
   const type = url.searchParams.get('type') || 'current'; // Default to 'current' if not provided
 
   // Validate that 'type' is either 'current' or 'forecast'
