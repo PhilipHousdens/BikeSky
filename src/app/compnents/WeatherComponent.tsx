@@ -29,7 +29,8 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
       const temp = weatherData.current.temp_c;
       const windSpeed = weatherData.current.wind_kph;
       const uvIndex = weatherData.current.uv;
-      const airQuality = 50; // Assuming a fixed value for air quality, or you can fetch this if available.
+      const condition = weatherData.current.condition.text;
+
   
       let score = 0;
   
@@ -41,7 +42,7 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
       } else if (temp < 10) {
           score += 3; // Cooler than ideal
           if (temp < 3) {
-              score += 1; // Very cold, even less ideal
+              score += 0; // Very cold, even less ideal
           }
       } else {
           score += 5; // Too hot
@@ -64,16 +65,14 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
       } else {
           score += 2; // High UV, less suitable
       }
-  
-      // Air Quality Score: Assuming the air quality index is out of 100
-      // You can adjust these ranges based on real AQI values
-      if (airQuality <= 50) {
-          score += 10; // Excellent air quality
-      } else if (airQuality <= 100) {
-          score += 7; // Fair air quality
-      } else {
-          score += 4; // Poor air quality, unsuitable for long rides
-      }
+
+      const conditionLower = condition.toLowerCase().trim();
+        if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('thunder')) score += 4;
+        if (conditionLower.includes('fog') || conditionLower.includes('mist')) score += 4;
+        if (conditionLower.includes('clear') || conditionLower.includes('sunny')) score += 10;
+        if (conditionLower.includes('cloudy') || conditionLower.includes('overcast')) score += 8;
+        if (conditionLower.includes('snow') || conditionLower.includes('blizzard')) score += 1;
+
   
       // Normalize the score to be out of 10
       const maxScore = 40; // Maximum possible score (10 + 10 + 10 + 10)
