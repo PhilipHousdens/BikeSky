@@ -2,6 +2,7 @@ import React from "react";
 import { Alert } from "./Alert";
 import { HourlyForecast } from "./Hourly";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
     if (!weatherData) {
         return <div>Loading weather data...</div>; // Display while waiting for data
