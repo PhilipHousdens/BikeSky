@@ -1,41 +1,40 @@
 "use client"
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';  // Use usePathname from next/navigation
+import Link from 'next/link';
 
 export default function Header() {
-    const [isClient, setIsClient] = useState(false);
+  const [pathname, setPathname] = useState<string>('');
+  
+  // useEffect to safely update pathname on the client-side only
+  useEffect(() => {
+    setPathname(window.location.pathname); // Directly using window.location.pathname
+  }, []);
+  
+  // Ensure pathname is updated after mount
+  if (pathname === '') {
+    return null; // Avoid rendering until pathname is set
+  }
 
-    // Check if we're on the client side
-    useEffect(() => {
-        setIsClient(typeof window !== 'undefined');
-    }, []);
-
-    // Prevent rendering until we're sure we're on the client side
-    if (!isClient) return null;
-
-    const currentPath = usePathname();  // Use usePathname hook from next/navigation
-
-    return (
-        <header className="bg-black p-4 text-white">
-            <nav className="container mx-auto flex justify-between items-center">
-                <h1 className="text-2xl font-bold">
-                    <span className='text-bikeOrange'>BIKER</span> SKY
-                </h1>
-                <ul className="flex space-x-4">
-                    <li>
-                        <Link href="/" className={currentPath === '/' ? 'text-bikeOrange' : ''}>
-                            HOME
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/about" className={currentPath === '/about' ? 'text-bikeOrange' : ''}>
-                            ABOUT
-                        </Link>
-                    </li>
-                    {/* Add other links as needed */}
-                </ul>
-            </nav>
-        </header>
-    );
+  return (
+    <header className="bg-black p-4 text-white">
+      <nav className="container mx-auto flex justify-between items-center">
+        <h1 className="text-2xl font-bold font-quantico">
+          <span className='text-bikeOrange font-orbitron'>BIKER</span> SKY
+        </h1>
+        <ul className="flex space-x-4">
+          <li>
+            <Link href="/" className={pathname === '/' ? 'text-bikeOrange font-quantico' : 'font-quantico'}>
+              HOME
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className={pathname === '/about' ? 'text-bikeOrange font-quantico' : 'font-quantico'}>
+              ABOUT
+            </Link>
+          </li>
+          {/* Add other links as needed */}
+        </ul>
+      </nav>
+    </header>
+  );
 }

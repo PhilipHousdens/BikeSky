@@ -107,11 +107,11 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
               </div>
               
               {/* Display only the time */}
-              <p className="text-7xl text-white text-center m-5 font-bold">{localTime} <span className="text-5xl">{amPm(parseInt(localTime))}</span></p>
+              <p className="text-7xl text-white text-stroke font-quantico text-center m-5 font-bold">{localTime} <span className="text-5xl">{amPm(parseInt(localTime))}</span></p>
 
               {/* Display current weather */}
               <div className="flex justify-center items-center h-1/2 flex-col">
-                  <p className="text-5xl text-white text-center m-5 font-bold">{weatherData.location.name}, {weatherData.location.country}</p>
+                  <p className="text-5xl font-orbitron text-white m-5 font-bold">{weatherData.location.name}, {weatherData.location.country}</p>
 
                   {/* Display weather details */}
                   <div className="space-y-5">
@@ -120,31 +120,31 @@ export const WeatherComponent = ({ weatherData }: { weatherData: any }) => {
                               <img src={weatherData.current.condition.icon} alt="Weather Icon" />
                           </div>
                           <div>
-                              <p className="text-3xl text-white">{weatherData.current.humidity}% Humidity</p>
-                              <p className="text-2xl text-white">{weatherData.current.condition.text}</p>
+                              <p className="text-3xl font-orbitron text-white">{weatherData.current.humidity}% Humidity</p>
+                              <p className="text-2xl font-orbitron text-white">{weatherData.current.condition.text}</p>
                           </div>
                       </div>
                       <div className="h-full flex justify-center items-center">
-                          <p className="text-5xl text-white">{weatherData.current.temp_c}&deg;C </p>
+                          <p className="text-5xl text-white font-orbitron">{weatherData.current.temp_c}&deg;C </p>
                       </div>
                   </div>
               </div>
-              <div className=" absolute left-0 bottom ">
+              <div className=" absolute left-0 bottom-28 ">
                 <HourlyForecast />
               </div>
-              <div className="absolute right-5 bottom-28 bg-black bg-opacity-50 text-white p-5 rounded-xl">
-                <p className="text text-3xl mb-5">Biker Suitability Index</p>
+              <div className="absolute right-5 bottom-28 bg-black bg-opacity-50 font-teko text-white p-5 rounded-xl">
+                <p className="text text-3xl mb-5 text-center">Biker Suitability Index</p>
                 <div className="flex items-center justify-center bg-black p-2 bg-opacity-80 rounded-lg space-x-10">
                   {/* For Image Icons */}
                   <div>
                     <img src={faceScore(score)} alt="Biker Suitability" className=""/>
                   </div>
-                  <div className="text-3xl">
+                  <div className="text-3xl font-quantico">
                     {score}
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center justify-center space-x-10 mt-5">
+                  <div className="flex items-center justify-center space-x-10 mt-5 font-quantico">
                     <div className="bg-black p-2 bg-opacity-80 rounded-lg">
                       <div>
                         <img src="/images/score/wind.png" alt="wind" className="w-[60px]" />

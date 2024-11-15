@@ -16,6 +16,30 @@ const config: Config = {
         gradientStart: "black",
         gradientEnd: "#2B3B4A"
       },
+      fontFamily: {
+        orbitron: ["Orbitron", 'sans-serif'],
+        quantico: ["Quantico", "sans-serif"],
+        teko: ["Teko", 'sans-serif']
+      },
+      animation: {
+        glow: 'glow 1.5s ease-in-out infinite',
+      },
+      keyframes: {
+        glow: {
+          '0%': {
+            textShadow: '0 0 5px #FF4141', // Initial faint red glow
+            boxShadow: '0 0 5px #FF4141', // Initial faint red glow
+          },
+          '50%': {
+            textShadow: '0 0 20px #FF4141', // Bright red glow
+            boxShadow: '0 0 20px #FF4141', // Bright red glow
+          },
+          '100%': {
+            textShadow: '0 0 5px #FF4141', // Back to faint red glow
+            boxShadow: '0 0 5px #FF4141', // Back to faint red glow
+          },
+        },
+      },
     },
   },
   plugins: [],
